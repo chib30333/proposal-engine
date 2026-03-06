@@ -1,29 +1,26 @@
 seed_dev_users <- function(pool) {
-  
-  source("R/auth/password_hash.R")
-  
   users <- DBI::dbGetQuery(pool, "SELECT COUNT(*) as n FROM users")
   
-  if (users$n > 0) {
+  if (users$n[[1]] > 0) {
     message("Users already seeded")
     return()
   }
   
-  admin_pass <- hash_password("Admin123!")
-  sales_pass <- hash_password("Sales123!")
+  admin_pass <- as.character(hash_password("Admin123!"))
+  sales_pass <- as.character(hash_password("Sales123!"))
   
   DBI::dbExecute(
     pool,
     "INSERT INTO users (email, password_hash, role)
-     VALUES ('admin@local', ?, 'admin')",
-    params = list(admin_pass)
+     VALUES (?, ?, ?)",
+    params = list("admin@local", admin_pass, "admin")
   )
   
   DBI::dbExecute(
     pool,
     "INSERT INTO users (email, password_hash, role)
-     VALUES ('sales@local', ?, 'sales')",
-    params = list(sales_pass)
+     VALUES (?, ?, ?)",
+    params = list("sales@local", sales_pass, "sales")
   )
   
   message("Seed users created")
