@@ -22,7 +22,6 @@ CREATE TABLE IF NOT EXISTS proposals (
     total_amount REAL DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-
     FOREIGN KEY(created_by) REFERENCES users(id)
 );
 
@@ -35,7 +34,6 @@ CREATE TABLE IF NOT EXISTS proposal_items (
     unit_price REAL,
     total REAL,
     meta_json TEXT,
-
     FOREIGN KEY(proposal_id) REFERENCES proposals(id)
 );
 

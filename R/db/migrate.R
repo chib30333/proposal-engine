@@ -8,7 +8,16 @@ run_migrations <- function(pool) {
   files <- sort(files)
   
   for (f in files) {
-    sql <- paste(readLines(f), collapse = "\n")
-    DBI::dbExecute(pool, sql)
+    message("Running migration: ", f)
+    sql <- paste(readLines(f, warn = FALSE), collapse = "\n")
+    
+    statements <- strsplit(sql, ";", fixed = TRUE)[[1]]
+    statements <- trimws(statements)
+    
+    statements <- statements[nzchar(statements)]
+    
+    for(stmt in statements) {
+      DBI::dbExecute(pool, stmt)
+    }
   }
 }
