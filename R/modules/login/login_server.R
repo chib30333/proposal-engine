@@ -13,7 +13,12 @@ login_server <- function(id, auth, db_pool) {
         return()
       }
       
-      ok <- verify_password(input$passsword, user$password_hash[1])
+      print(input$passsword, digits = NULL, quote = TRUE,
+            na.print = NULL, print.gap = NULL, right = FALSE,
+            max = NULL, width = NULL, useSource = TRUE)
+      
+      password_hash <- as.character(user$password_hash[1])
+      ok <- verify_password(input$passsword, password_hash)
       
       if(!ok) {
         output$error <- renderText("Invalid password")
